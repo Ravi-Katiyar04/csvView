@@ -51,6 +51,7 @@ Router.post("/upload-student-teacher", upload.fields([{ name: "studentFile" }, {
 
                 stream.on("headers", async (headerList) => {
                     headers.push(...headerList);
+                    
 
                     if (!headerList.length) return reject("Invalid CSV file");
 
@@ -65,6 +66,7 @@ Router.post("/upload-student-teacher", upload.fields([{ name: "studentFile" }, {
                         default: Date.now,
                         expires: 86400, // Auto-delete in 24 hours
                     };
+                    
 
                     // Set dynamic model name
                     const DynamicModel = mongoose.model(modelName, new mongoose.Schema(schemaDefinition));
@@ -83,7 +85,7 @@ Router.post("/upload-student-teacher", upload.fields([{ name: "studentFile" }, {
 
                         }
                         if (modelName.includes("Teacher")) {
-                            teacherRecords = [...records]; // Store Teacher records
+                            teacherRecords = [...headers]; // Store Teacher records
                             teacherDynamicModel = DynamicModel;
                         }
 
@@ -108,7 +110,7 @@ Router.post("/upload-student-teacher", upload.fields([{ name: "studentFile" }, {
             success: true,
             message: "Both files uploaded and processed successfully",
         });
-        
+
 
     } catch (error) {
         console.error(error);
