@@ -1,8 +1,11 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+// import { useNavigate } from 'react-router-dom';
 
-const Table = ({ headers, students, onEdit }) => {
+const Table = ({ headers, students }) => {
     const [editingStudent, setEditingStudent] = useState(null);
+    const [sid, setSid] = useState(null);
     const [formData, setFormData] = useState({
         Roll_Number: '',
         Name: '',
@@ -32,6 +35,7 @@ const Table = ({ headers, students, onEdit }) => {
 
     const handleEditClick = (student) => {
         if (confirm("Are you sure you want to edit this data?")) {
+            setSid(student._id);
             setEditingStudent(student);
             setFormData(student);
         }
@@ -42,14 +46,19 @@ const Table = ({ headers, students, onEdit }) => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onEdit(formData);
+        try {
+            const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/updateStudent/${sid}`, formData);
+            console.log(response.data);
+        } catch (error) {
+            console.log(error);
+        }
         setEditingStudent(null);
     };
 
     return (
-        <div>
+        <div className="container mx-auto px-4">
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                     <tr>
@@ -78,23 +87,23 @@ const Table = ({ headers, students, onEdit }) => {
 
             {editingStudent && (
                 <form ref={formRef} onSubmit={handleSubmit} className="fixed left-0 bottom-0 bg-white p-4 shadow-lg">
-                    <div>
-                        <label>Roll Number</label>
-                        <input type="number" name="Roll_Number" value={formData.Roll_Number} onChange={handleChange} required />
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Roll Number</label>
+                        <input type="number" name="Roll_Number" value={formData.Roll_Number} onChange={handleChange} required className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                     </div>
-                    <div>
-                        <label>Name</label>
-                        <input type="text" name="Name" value={formData.Name} onChange={handleChange} required />
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Name</label>
+                        <input type="text" name="Name" value={formData.Name} onChange={handleChange} required className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                     </div>
-                    <div>
-                        <label>Class</label>
-                        <input type="text" name="Class" value={formData.Class} onChange={handleChange} required />
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Class</label>
+                        <input type="text" name="Class" value={formData.Class} onChange={handleChange} required className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                     </div>
-                    <div>
-                        <label>Phone Number</label>
-                        <input type="text" name="Phone_Number" value={formData.Phone_Number} onChange={handleChange} required />
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Phone Number</label>
+                        <input type="text" name="Phone_Number" value={formData.Phone_Number} onChange={handleChange} required className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                     </div>
-                    <button type="submit" className="mt-2 bg-blue-500 text-white px-4 py-2">Save</button>
+                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Save</button>
                 </form>
             )}
         </div>
@@ -115,4 +124,3 @@ Table.propTypes = {
 };
 
 export default Table;
-

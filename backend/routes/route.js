@@ -108,7 +108,7 @@ Router.post("/upload-student-teacher", upload.fields([{ name: "studentFile" }, {
             success: true,
             message: "Both files uploaded and processed successfully",
         });
-
+        
 
     } catch (error) {
         console.error(error);
@@ -122,6 +122,17 @@ Router.get('/getStudentsData', async (req, res) => {
         .then(students => res.json({ success: true, studentHeaders, students }))
         .catch(err => res.status(400).json({ error: "error fetching employees" + err }));
 });
+
+Router.put('/updateStudent/:sid', async (req, res) => {
+    StudentDynamicModel.findByIdAndUpdate(
+        req.params.sid,
+        req.body,
+        { new: true }
+    )
+        .then(student => res.json(student))
+        .catch(err => res.status(400).json({ error: "error fetching employees" + err }));
+});
+
 Router.get('/getTeachersData', async (req, res) => {
     teacherDynamicModel.find()
         .then(teachers => res.json({ success: true, teacherRecords, teachers }))
