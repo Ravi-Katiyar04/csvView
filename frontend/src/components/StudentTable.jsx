@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 // import { useNavigate } from 'react-router-dom';
 
-const Table = ({ headers, students }) => {
+const StudentTable = ({ headers, students }) => {
     const [editingStudent, setEditingStudent] = useState(null);
     const [sid, setSid] = useState(null);
     const [formData, setFormData] = useState({
@@ -110,7 +110,7 @@ const Table = ({ headers, students }) => {
     );
 };
 
-Table.propTypes = {
+StudentTable.propTypes = {
     headers: PropTypes.arrayOf(PropTypes.string).isRequired,
     students: PropTypes.arrayOf(
         PropTypes.shape({
@@ -123,4 +123,4 @@ Table.propTypes = {
     onEdit: PropTypes.func.isRequired,
 };
 
-export default Table;
+export default StudentTable;

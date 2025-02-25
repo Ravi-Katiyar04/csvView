@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import axios from "axios";
-import Table from "../components/Table";
+import StudentTable from "../components/StudentTable";
 
 const ClassSelectionAndData = () => {
     const [selectedClass, setSelectedClass] = useState(null);
@@ -53,9 +53,9 @@ const ClassSelectionAndData = () => {
                         <p className="text-lg font-semibold">Loading data...</p>
                     ) : (
                         <>
-                            <h1 className="text-xl font-bold">Class {selectedClass} Data</h1>
+                            <button className="text-xl font-bold">Class {selectedClass} Data</button>
                             {students.length > 0 ? (
-                                <Table students={students} headers={headers} />
+                                <StudentTable students={students} headers={headers} />
                             ) : (
                                 <p>No students found for this class.</p>
                             )}
