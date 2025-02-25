@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-// import { useNavigate } from 'react-router-dom';
 
 const StudentTable = ({ headers, students }) => {
     const [editingStudent, setEditingStudent] = useState(null);

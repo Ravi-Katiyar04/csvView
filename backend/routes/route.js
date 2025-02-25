@@ -29,7 +29,7 @@ const upload = multer({
 let StudentDynamicModel = {};
 let teacherDynamicModel = {};
 var studentHeaders = [];  // To store Student CSV headers
-var teacherRecords = [];  // To store Teacher CSV records
+var teacherHeaders = [];  // To store Teacher CSV records
 
 Router.post("/upload-student-teacher", upload.fields([{ name: "studentFile" }, { name: "teacherFile" }]), async (req, res) => {
     try {
@@ -85,7 +85,7 @@ Router.post("/upload-student-teacher", upload.fields([{ name: "studentFile" }, {
 
                         }
                         if (modelName.includes("Teacher")) {
-                            teacherRecords = [...headers]; // Store Teacher records
+                            teacherHeaders = [...headers]; // Store Teacher records
                             teacherDynamicModel = DynamicModel;
                         }
 
@@ -137,7 +137,7 @@ Router.put('/updateStudent/:sid', async (req, res) => {
 
 Router.get('/getTeachersData', async (req, res) => {
     teacherDynamicModel.find()
-        .then(teachers => res.json({ success: true, teacherRecords, teachers }))
+        .then(teachers => res.json({ success: true, teacherHeaders, teachers }))
         .catch(err => res.status(400).json({ error: "error fetching employees" + err }));
 });
 
