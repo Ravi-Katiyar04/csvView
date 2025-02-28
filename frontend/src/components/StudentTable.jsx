@@ -1,9 +1,12 @@
+
 import PropTypes from 'prop-types';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 
-const StudentTable = ({ headers, students }) => {
+const StudentTable = ({ className }) => {
     const [editingStudent, setEditingStudent] = useState(null);
+    const [headers, setHeaders] = useState([]);
+    const [students, setStudents] = useState([]);
     const [sid, setSid] = useState(null);
     const [formData, setFormData] = useState({
         Roll_Number: '',
@@ -11,6 +14,7 @@ const StudentTable = ({ headers, students }) => {
         Class: '',
         Phone_Number: ''
     });
+    const [loading, setLoading] = useState(true);
 
     const formRef = useRef(null);
 
@@ -32,6 +36,40 @@ const StudentTable = ({ headers, students }) => {
         };
     }, [editingStudent]);
 
+    const handleSubmit = useCallback(async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/updateStudent/${sid}`, formData);
+            console.log(response.data);
+            setStudents((prevStudents) =>
+                prevStudents.map((student) =>
+                    student._id === sid ? { ...student, ...formData } : student
+                )
+            );
+        } catch (error) {
+            console.log(error);
+        }
+        setEditingStudent(null);
+    }, [sid, formData]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/getStudentsData`);
+                const studentsInClass = response.data.students.filter(student => student.Class === className);
+
+                setStudents(studentsInClass);
+                setHeaders(response.data.studentHeaders);
+            } catch (error) {
+                console.error('Error fetching students:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [className]);
+
     const handleEditClick = (student) => {
         if (confirm("Are you sure you want to edit this data?")) {
             setSid(student._id);
@@ -45,16 +83,9 @@ const StudentTable = ({ headers, students }) => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/updateStudent/${sid}`, formData);
-            console.log(response.data);
-        } catch (error) {
-            console.log(error);
-        }
-        setEditingStudent(null);
-    };
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="container mx-auto px-4">
@@ -110,16 +141,7 @@ const StudentTable = ({ headers, students }) => {
 };
 
 StudentTable.propTypes = {
-    headers: PropTypes.arrayOf(PropTypes.string).isRequired,
-    students: PropTypes.arrayOf(
-        PropTypes.shape({
-            Roll_Number: PropTypes.number.isRequired,
-            Name: PropTypes.string.isRequired,
-            Class: PropTypes.string.isRequired,
-            Phone_Number: PropTypes.string.isRequired,
-        })
-    ).isRequired,
-    onEdit: PropTypes.func.isRequired,
+    className: PropTypes.string.isRequired,
 };
 
 export default StudentTable;
