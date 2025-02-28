@@ -34,7 +34,7 @@ var teacherHeaders = [];  // To store Teacher CSV records
 Router.post("/upload-student-teacher", upload.fields([{ name: "studentFile" }, { name: "teacherFile" }]), async (req, res) => {
     try {
         const studentFilePath = req.files["studentFile"]?.[0]?.path;
-        const teacherFilePath = req.files["teacherFile"]?.[0]?.path;
+        const teacherFilePath = req.files["teacherFile"]?.[0]?.path;                                            
 
         if (!studentFilePath || !teacherFilePath) {
             return res.status(400).json({ success: false, message: "Both Student and Teacher CSV files are required." });

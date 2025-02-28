@@ -62,6 +62,10 @@ Create a `.env` file in the backend directory:
 PORT=3000
 DB_URL=mongodb://localhost:27017/csvViewer
 ```
+Create folder inside backend
+```
+Create folder public/uploads in the backend directory.
+```
 
 3. Frontend Setup:
 ```bash
@@ -80,7 +84,7 @@ VITE_BASE_URL=http://localhost:3000
 1. Start the Backend:
 ```bash
 cd backend
-npm nodemon
+npx nodemon
 ```
 
 2. Start the Frontend:
