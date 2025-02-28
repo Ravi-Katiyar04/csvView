@@ -66,10 +66,8 @@ DB_URL=mongodb://localhost:27017/csvViewer
 3. Frontend Setup:
 ```bash
 cd frontend
-npm create vite@latest
 npm install
 npm install -D tailwindcss@3 postcss autoprefixer
-npx tailwindcss init -p
 ```
 
 Create a `.env` file in the frontend directory:
